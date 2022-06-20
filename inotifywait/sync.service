@@ -1,0 +1,20 @@
+[Unit]
+Description = SyncService
+After = network.target
+
+[Service]
+PIDFile = /home/ardi/syncservice/syncservice.pid
+User = ardi
+Group = ardi
+WorkingDirectory = /home/ardi
+ExecStartPre = /bin/mkdir /home/ardi/syncservice
+ExecStartPre = /bin/chown -R ardi:ardi /home/ardi/syncservice
+ExecStart = /bin/bash /home/ardi/runsync.sh
+ExecReload = /bin/kill -s HUP $MAINPID
+ExecStop = /bin/kill -s TERM $MAINPID
+ExecStopPost = /bin/rm -rf /home/ardi/syncservice
+PrivateTmp = true
+
+[Install]
+WantedBy = multi-user.target
+
